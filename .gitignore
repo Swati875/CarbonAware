@@ -1,0 +1,8 @@
+.venv/
+.conda/
+__pycache__/
+*.pyc
+.env
+local_db.json
+local_db.json.tmp
+.vscode/

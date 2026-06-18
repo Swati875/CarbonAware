@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon - Footprint Tracker & AI Coach</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">🌱</div>
+                <h1 class="brand-name">CARBON</h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </button>
+                <button class="nav-item" data-tab="calculator">
+                    <span class="nav-icon">🧮</span>
+                    <span class="nav-text">Calculator</span>
+                </button>
+                <button class="nav-item" data-tab="goals">
+                    <span class="nav-icon">🏆</span>
+                    <span class="nav-text">Goals & Badges</span>
+                </button>
+                <button class="nav-item" data-tab="coach">
+                    <span class="nav-icon">🤖</span>
+                    <span class="nav-text">AI Coach</span>
+                </button>
+                <button class="nav-item" data-tab="offset">
+                    <span class="nav-icon">🌳</span>
+                    <span class="nav-text">Offset Simulator</span>
+                </button>
+                <button class="nav-item" data-tab="developer">
+                    <span class="nav-icon">💻</span>
+                    <span class="nav-text">Developer Lab</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="status-indicator online"></div>
+                <span id="backend-status">Local Mock Database</span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div>
+                    <span class="date-today" id="current-date">Wednesday, June 17, 2026</span>
+                    <h2 class="welcome-title">Welcome Back, Eco Hero</h2>
+                </div>
+                <div class="header-metrics">
+                    <div class="header-metric-card">
+                        <span class="metric-label">App CO₂ Footprint</span>
+                        <span class="metric-value text-green" id="header-dev-emissions">0.000g</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Tab -->
+            <section id="tab-dashboard" class="tab-panel active">
+                <div class="grid-layout">
+                    <!-- Metric Cards Row -->
+                    <div class="metric-card glass card-span-4">
+                        <div class="metric-header">
+                            <h3>Weekly Carbon Footprint</h3>
+                            <span class="card-icon">⚡</span>
+                        </div>
+                        <div class="metric-body">
+                            <h2 class="large-value" id="dash-total-co2">0.00 <span class="unit">kg CO₂</span></h2>
+                            <p class="metric-subtext">Estimated based on your latest entry</p>
+                        </div>
+                    </div>
+                    <div class="metric-card glass card-span-4">
+                        <div class="metric-header">
+                            <h3>Tree Absorption Equiv.</h3>
+                            <span class="card-icon">🌳</span>
+                        </div>
+                        <div class="metric-body">
+                            <h2 class="large-value" id="dash-trees">0 <span class="unit">trees / year</span></h2>
+                            <p class="metric-subtext">Required to offset your weekly emissions</p>
+                        </div>
+                    </div>
+                    <div class="metric-card glass card-span-4">
+                        <div class="metric-header">
+                            <h3>Primary Emission Source</h3>
+                            <span class="card-icon">🎯</span>
+                        </div>
+                        <div class="metric-body">
+                            <h2 class="large-value text-yellow" id="dash-primary-source">N/A</h2>
+                            <p class="metric-subtext">Highest impact category</p>
+                        </div>
+                    </div>
+
+                    <!-- Visualizations Row -->
+                    <div class="content-card glass card-span-8">
+                        <h3>Historical Emissions Trend</h3>
+                        <div class="chart-container">
+                            <canvas id="historyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="content-card glass card-span-4">
+                        <h3>Category Distribution</h3>
+                        <div class="chart-container-donut">
+                            <canvas id="donutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calculator Tab -->
+            <section id="tab-calculator" class="tab-panel">
+                <div class="calculator-container glass">
+                    <div class="calculator-sidebar">
+                        <h3>Footprint Estimator</h3>
+                        <p class="info-text">Update your weekly activities to recalculate your real-time carbon emissions score.</p>
+                        
+                        <div class="gauge-box">
+                            <div class="gauge-title">Weekly Score</div>
+                            <div class="gauge-value" id="calc-live-total">0.00</div>
+                            <div class="gauge-unit">kg CO₂e</div>
+                            <div class="gauge-bar-container">
+                                <div class="gauge-bar" id="calc-gauge-bar"></div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-block" id="btn-save-calculation">Save Log Entry</button>
+                    </div>
+                    
+                    <div class="calculator-form">
+                        <!-- Transport Section -->
+                        <div class="form-section">
+                            <h4 class="section-title">🚗 Transportation (weekly)</h4>
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label>Distance Driven by Car (Petrol/Diesel)</label>
+                                    <span class="slider-value" id="val-car">0 km</span>
+                                </div>
+                                <input type="range" class="slider" id="slider-car" min="0" max="500" value="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label>Distance via Public Transit (Bus/Train)</label>
+                                    <span class="slider-value" id="val-bus">0 km</span>
+                                </div>
+                                <input type="range" class="slider" id="slider-bus" min="0" max="300" value="0">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label>Short & Long Haul Flights</label>
+                                    <span class="slider-value" id="val-flight">0 km</span>
+                                </div>
+                                <input type="range" class="slider" id="slider-flight" min="0" max="2500" value="0" step="50">
+                            </div>
+                        </div>
+
+                        <!-- Energy Section -->
+                        <div class="form-section">
+                            <h4 class="section-title">💡 Home Energy Consumption (weekly)</h4>
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label>Standard Grid Electricity</label>
+                                    <span class="slider-value" id="val-grid">0 kWh</span>
+                                </div>
+                                <input type="range" class="slider" id="slider-grid" min="0" max="200" value="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label>Green/Renewable Energy (Solar/Wind)</label>
+                                    <span class="slider-value" id="val-green">0 kWh</span>
+                                </div>
+                                <input type="range" class="slider" id="slider-green" min="0" max="200" value="0">
+                            </div>
+                        </div>
+
+                        <!-- Diet & Food Section -->
+                        <div class="form-section">
+                            <h4 class="section-title">🥗 Diet Type</h4>
+                            <div class="diet-selector">
+                                <label class="diet-option active" data-diet="balanced">
+                                    <input type="radio" name="diet" value="balanced" checked style="display:none;">
+                                    <div class="diet-icon">🍖🧀</div>
+                                    <div class="diet-label">Balanced</div>
+                                    <div class="diet-desc">Average meat, dairy & plant mix</div>
+                                </label>
+                                <label class="diet-option" data-diet="meat_heavy">
+                                    <input type="radio" name="diet" value="meat_heavy" style="display:none;">
+                                    <div class="diet-icon">🥩🥓</div>
+                                    <div class="diet-label">Meat Heavy</div>
+                                    <div class="diet-desc">Red meat in most meals</div>
+                                </label>
+                                <label class="diet-option" data-diet="vegetarian">
+                                    <input type="radio" name="diet" value="vegetarian" style="display:none;">
+                                    <div class="diet-icon">🥚🥦</div>
+                                    <div class="diet-label">Vegetarian</div>
+                                    <div class="diet-desc">No meat, includes dairy/eggs</div>
+                                </label>
+                                <label class="diet-option" data-diet="vegan">
+                                    <input type="radio" name="diet" value="vegan" style="display:none;">
+                                    <div class="diet-icon">🥗🍎</div>
+                                    <div class="diet-label">Vegan</div>
+                                    <div class="diet-desc">Entirely plant-based</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Waste Section -->
+                        <div class="form-section">
+                            <h4 class="section-title">🗑️ Waste Production (weekly)</h4>
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label>Landfill Trash</label>
+                                    <span class="slider-value" id="val-landfill">0 kg</span>
+                                </div>
+                                <input type="range" class="slider" id="slider-landfill" min="0" max="50" value="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label>Recycled & Composted Waste</label>
+                                    <span class="slider-value" id="val-recycled">0 kg</span>
+                                </div>
+                                <input type="range" class="slider" id="slider-recycled" min="0" max="50" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Goals & Badges Tab -->
+            <section id="tab-goals" class="tab-panel">
+                <div class="grid-layout">
+                    <!-- Goals Checklist -->
+                    <div class="content-card glass card-span-7">
+                        <h3>Eco Habits Checklist</h3>
+                        <p class="card-subtitle">Complete weekly goals to unlock badges and shrink your footprint.</p>
+                        
+                        <div class="goals-list" id="goals-list-container">
+                            <!-- Populated dynamically -->
+                            <div class="loading-spinner">Loading goals...</div>
+                        </div>
+                    </div>
+
+                    <!-- Badges Showcase -->
+                    <div class="content-card glass card-span-5">
+                        <h3>Gamified Badges</h3>
+                        <p class="card-subtitle">Achieve targets to unlock unique carbon achievements.</p>
+                        
+                        <div class="badges-showcase" id="badges-container">
+                            <!-- Populated dynamically -->
+                            <div class="loading-spinner">Loading achievements...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Coach Tab -->
+            <section id="tab-coach" class="tab-panel">
+                <div class="coach-container glass">
+                    <div class="coach-header">
+                        <div class="coach-avatar">🤖</div>
+                        <div>
+                            <h3>CarbonCoach AI</h3>
+                            <span class="coach-status">Active & Ready to Advise</span>
+                        </div>
+                    </div>
+                    
+                    <div class="coach-chat-window" id="chat-messages">
+                        <div class="chat-message coach">
+                            <div class="message-content">
+                                👋 Hello! I am **CarbonCoach**, your AI sustainability assistant.
+                                
+                                I can analyze your calculation log and help design custom targets to reduce your footprint.
+                                
+                                Try asking me:
+                                - *"How can I lower my electricity footprint?"*
+                                - *"What is the impact of my driving habits?"*
+                                - *"Give me a tailored sustainability summary."*
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="coach-input-area">
+                        <input type="text" id="chat-input" placeholder="Type your sustainability questions..." autocomplete="off">
+                        <button class="btn btn-primary" id="btn-send-chat">Send</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Offset Simulator Tab -->
+            <section id="tab-offset" class="tab-panel">
+                <div class="grid-layout">
+                    <div class="content-card glass card-span-7">
+                        <h3>Net Zero Offset Simulator</h3>
+                        <p class="card-subtitle">Simulate how green actions and certified carbon offsets neutralise your emissions.</p>
+                        
+                        <div class="offset-controls">
+                            <!-- Trees Simulator -->
+                            <div class="offset-slider-group">
+                                <div class="slider-header">
+                                    <div>
+                                        <span class="offset-emoji">🌳</span>
+                                        <strong>Plant Native Trees</strong>
+                                    </div>
+                                    <span class="slider-value text-green" id="val-sim-trees">0 Trees</span>
+                                </div>
+                                <p class="sub-desc">Each tree absorbs roughly 22 kg CO₂ per year (0.42 kg/week).</p>
+                                <input type="range" class="slider slider-green" id="slider-sim-trees" min="0" max="150" value="0">
+                            </div>
+
+                            <!-- Solar Grid Credit -->
+                            <div class="offset-slider-group">
+                                <div class="slider-header">
+                                    <div>
+                                        <span class="offset-emoji">☀️</span>
+                                        <strong>Wind/Solar Offset Credits</strong>
+                                    </div>
+                                    <span class="slider-value text-green" id="val-sim-credits">0 kWh</span>
+                                </div>
+                                <p class="sub-desc">Certified green grid generation offseting grid electricity consumption.</p>
+                                <input type="range" class="slider slider-green" id="slider-sim-credits" min="0" max="250" value="0">
+                            </div>
+
+                            <!-- Methane Capture -->
+                            <div class="offset-slider-group">
+                                <div class="slider-header">
+                                    <div>
+                                        <span class="offset-emoji">💨</span>
+                                        <strong>Landfill Gas/Methane Capture</strong>
+                                    </div>
+                                    <span class="slider-value text-green" id="val-sim-methane">0 kg</span>
+                                </div>
+                                <p class="sub-desc">Supporting bio-digesters and composting programs.</p>
+                                <input type="range" class="slider slider-green" id="slider-sim-methane" min="0" max="80" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card glass card-span-5 center-flex">
+                        <div class="neutrality-card">
+                            <h3>Emissions Ledger</h3>
+                            
+                            <div class="ledger-row">
+                                <span>Gross Emissions:</span>
+                                <span class="ledger-val text-red" id="ledger-gross">0.00 kg</span>
+                            </div>
+                            <div class="ledger-row border-bottom">
+                                <span>Simulated Offsets:</span>
+                                <span class="ledger-val text-green" id="ledger-offset">0.00 kg</span>
+                            </div>
+                            <div class="ledger-row ledger-total">
+                                <span>Net Balance:</span>
+                                <span class="ledger-val" id="ledger-net">0.00 kg</span>
+                            </div>
+
+                            <div class="neutrality-gauge">
+                                <div class="neutrality-circle" id="neutrality-indicator">
+                                    <div class="neutrality-text" id="neutrality-status">CO₂ Positive</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Developer Lab Tab -->
+            <section id="tab-developer" class="tab-panel">
+                <div class="grid-layout">
+                    <div class="content-card glass card-span-6">
+                        <h3>Compute Carbon Footprint (CodeCarbon)</h3>
+                        <p class="card-subtitle">This dashboard showcases the real-time operational CO₂ emissions created by running this application and processing server queries.</p>
+                        
+                        <div class="metrics-grid">
+                            <div class="metric-item">
+                                <div class="metric-item-val" id="dev-emissions">0.000000g</div>
+                                <div class="metric-item-label">Operational CO₂ (grams)</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-item-val" id="dev-energy">0.000000 kWh</div>
+                                <div class="metric-item-label">Energy Consumed</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-item-val" id="dev-uptime">0s</div>
+                                <div class="metric-item-label">Server Uptime</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-item-val" id="dev-trees-sec">0s</div>
+                                <div class="metric-item-label">Tree-equivalent absorption seconds required</div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-secondary mt-20" id="btn-refresh-metrics">Refresh Metrics</button>
+                    </div>
+
+                    <div class="content-card glass card-span-6">
+                        <h3>Firebase & Google API Status</h3>
+                        <p class="card-subtitle">Connection checkpoints and active variables on the server.</p>
+                        
+                        <ul class="status-list">
+                            <li>
+                                <strong>Firebase Firestore Status:</strong>
+                                <span class="badge badge-error" id="status-firebase-badge">Inactive</span>
+                                <p class="status-desc" id="status-firebase-desc">Running in local mode. Setup FIREBASE_CREDENTIALS_PATH in .env to write data to Firestore.</p>
+                            </li>
+                            <li class="mt-20">
+                                <strong>Google Gemini API Status:</strong>
+                                <span class="badge badge-error" id="status-gemini-badge">Inactive</span>
+                                <p class="status-desc" id="status-gemini-desc">Running with local mock chatbot. Setup GEMINI_API_KEY in .env to use live Generative AI models.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Script Load -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

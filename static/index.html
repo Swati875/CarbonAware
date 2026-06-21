@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Carbon is an interactive footprint tracker and AI sustainability assistant that helps you estimate and reduce your carbon emissions.">
     <title>Carbon - Footprint Tracker & AI Coach</title>
     
     <!-- Google Fonts -->
@@ -21,33 +22,33 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="brand">
-                <div class="brand-logo">🌱</div>
+                <div class="brand-logo" aria-hidden="true">🌱</div>
                 <h1 class="brand-name">CARBON</h1>
             </div>
             
             <nav class="nav-menu">
-                <button class="nav-item active" data-tab="dashboard">
-                    <span class="nav-icon">📊</span>
+                <button id="nav-btn-dashboard" class="nav-item active" data-tab="dashboard">
+                    <span class="nav-icon" aria-hidden="true">📊</span>
                     <span class="nav-text">Dashboard</span>
                 </button>
-                <button class="nav-item" data-tab="calculator">
-                    <span class="nav-icon">🧮</span>
+                <button id="nav-btn-calculator" class="nav-item" data-tab="calculator">
+                    <span class="nav-icon" aria-hidden="true">🧮</span>
                     <span class="nav-text">Calculator</span>
                 </button>
-                <button class="nav-item" data-tab="goals">
-                    <span class="nav-icon">🏆</span>
+                <button id="nav-btn-goals" class="nav-item" data-tab="goals">
+                    <span class="nav-icon" aria-hidden="true">🏆</span>
                     <span class="nav-text">Goals & Badges</span>
                 </button>
-                <button class="nav-item" data-tab="coach">
-                    <span class="nav-icon">🤖</span>
+                <button id="nav-btn-coach" class="nav-item" data-tab="coach">
+                    <span class="nav-icon" aria-hidden="true">🤖</span>
                     <span class="nav-text">AI Coach</span>
                 </button>
-                <button class="nav-item" data-tab="offset">
-                    <span class="nav-icon">🌳</span>
+                <button id="nav-btn-offset" class="nav-item" data-tab="offset">
+                    <span class="nav-icon" aria-hidden="true">🌳</span>
                     <span class="nav-text">Offset Simulator</span>
                 </button>
-                <button class="nav-item" data-tab="developer">
-                    <span class="nav-icon">💻</span>
+                <button id="nav-btn-developer" class="nav-item" data-tab="developer">
+                    <span class="nav-icon" aria-hidden="true">💻</span>
                     <span class="nav-text">Developer Lab</span>
                 </button>
             </nav>
@@ -81,7 +82,7 @@
                     <div class="metric-card glass card-span-4">
                         <div class="metric-header">
                             <h3>Weekly Carbon Footprint</h3>
-                            <span class="card-icon">⚡</span>
+                            <span class="card-icon" aria-hidden="true">⚡</span>
                         </div>
                         <div class="metric-body">
                             <h2 class="large-value" id="dash-total-co2">0.00 <span class="unit">kg CO₂</span></h2>
@@ -91,7 +92,7 @@
                     <div class="metric-card glass card-span-4">
                         <div class="metric-header">
                             <h3>Tree Absorption Equiv.</h3>
-                            <span class="card-icon">🌳</span>
+                            <span class="card-icon" aria-hidden="true">🌳</span>
                         </div>
                         <div class="metric-body">
                             <h2 class="large-value" id="dash-trees">0 <span class="unit">trees / year</span></h2>
@@ -101,7 +102,7 @@
                     <div class="metric-card glass card-span-4">
                         <div class="metric-header">
                             <h3>Primary Emission Source</h3>
-                            <span class="card-icon">🎯</span>
+                            <span class="card-icon" aria-hidden="true">🎯</span>
                         </div>
                         <div class="metric-body">
                             <h2 class="large-value text-yellow" id="dash-primary-source">N/A</h2>
@@ -113,13 +114,13 @@
                     <div class="content-card glass card-span-8">
                         <h3>Historical Emissions Trend</h3>
                         <div class="chart-container">
-                            <canvas id="historyChart"></canvas>
+                            <canvas id="historyChart" role="img" aria-label="Historical Emissions Trend Chart">Your browser does not support the canvas element.</canvas>
                         </div>
                     </div>
                     <div class="content-card glass card-span-4">
                         <h3>Category Distribution</h3>
                         <div class="chart-container-donut">
-                            <canvas id="donutChart"></canvas>
+                            <canvas id="donutChart" role="img" aria-label="Category Distribution Chart">Your browser does not support the canvas element.</canvas>
                         </div>
                     </div>
                 </div>
@@ -150,7 +151,7 @@
                             <h4 class="section-title">🚗 Transportation (weekly)</h4>
                             <div class="form-group">
                                 <div class="slider-header">
-                                    <label>Distance Driven by Car (Petrol/Diesel)</label>
+                                    <label for="slider-car">Distance Driven by Car (Petrol/Diesel)</label>
                                     <span class="slider-value" id="val-car">0 km</span>
                                 </div>
                                 <input type="range" class="slider" id="slider-car" min="0" max="500" value="0">
@@ -158,7 +159,7 @@
                             
                             <div class="form-group">
                                 <div class="slider-header">
-                                    <label>Distance via Public Transit (Bus/Train)</label>
+                                    <label for="slider-bus">Distance via Public Transit (Bus/Train)</label>
                                     <span class="slider-value" id="val-bus">0 km</span>
                                 </div>
                                 <input type="range" class="slider" id="slider-bus" min="0" max="300" value="0">
@@ -166,7 +167,7 @@
 
                             <div class="form-group">
                                 <div class="slider-header">
-                                    <label>Short & Long Haul Flights</label>
+                                    <label for="slider-flight">Short & Long Haul Flights</label>
                                     <span class="slider-value" id="val-flight">0 km</span>
                                 </div>
                                 <input type="range" class="slider" id="slider-flight" min="0" max="2500" value="0" step="50">
@@ -178,7 +179,7 @@
                             <h4 class="section-title">💡 Home Energy Consumption (weekly)</h4>
                             <div class="form-group">
                                 <div class="slider-header">
-                                    <label>Standard Grid Electricity</label>
+                                    <label for="slider-grid">Standard Grid Electricity</label>
                                     <span class="slider-value" id="val-grid">0 kWh</span>
                                 </div>
                                 <input type="range" class="slider" id="slider-grid" min="0" max="200" value="0">
@@ -186,7 +187,7 @@
                             
                             <div class="form-group">
                                 <div class="slider-header">
-                                    <label>Green/Renewable Energy (Solar/Wind)</label>
+                                    <label for="slider-green">Green/Renewable Energy (Solar/Wind)</label>
                                     <span class="slider-value" id="val-green">0 kWh</span>
                                 </div>
                                 <input type="range" class="slider" id="slider-green" min="0" max="200" value="0">
@@ -198,26 +199,26 @@
                             <h4 class="section-title">🥗 Diet Type</h4>
                             <div class="diet-selector">
                                 <label class="diet-option active" data-diet="balanced">
-                                    <input type="radio" name="diet" value="balanced" checked style="display:none;">
-                                    <div class="diet-icon">🍖🧀</div>
+                                    <input id="diet-radio-balanced" type="radio" name="diet" value="balanced" checked style="opacity: 0; position: absolute; pointer-events: none;" aria-label="Balanced Diet">
+                                    <div class="diet-icon" aria-hidden="true">🍖🧀</div>
                                     <div class="diet-label">Balanced</div>
                                     <div class="diet-desc">Average meat, dairy & plant mix</div>
                                 </label>
                                 <label class="diet-option" data-diet="meat_heavy">
-                                    <input type="radio" name="diet" value="meat_heavy" style="display:none;">
-                                    <div class="diet-icon">🥩🥓</div>
+                                    <input id="diet-radio-meat" type="radio" name="diet" value="meat_heavy" style="opacity: 0; position: absolute; pointer-events: none;" aria-label="Meat Heavy Diet">
+                                    <div class="diet-icon" aria-hidden="true">🥩🥓</div>
                                     <div class="diet-label">Meat Heavy</div>
                                     <div class="diet-desc">Red meat in most meals</div>
                                 </label>
                                 <label class="diet-option" data-diet="vegetarian">
-                                    <input type="radio" name="diet" value="vegetarian" style="display:none;">
-                                    <div class="diet-icon">🥚🥦</div>
+                                    <input id="diet-radio-vegetarian" type="radio" name="diet" value="vegetarian" style="opacity: 0; position: absolute; pointer-events: none;" aria-label="Vegetarian Diet">
+                                    <div class="diet-icon" aria-hidden="true">🥚🥦</div>
                                     <div class="diet-label">Vegetarian</div>
                                     <div class="diet-desc">No meat, includes dairy/eggs</div>
                                 </label>
                                 <label class="diet-option" data-diet="vegan">
-                                    <input type="radio" name="diet" value="vegan" style="display:none;">
-                                    <div class="diet-icon">🥗🍎</div>
+                                    <input id="diet-radio-vegan" type="radio" name="diet" value="vegan" style="opacity: 0; position: absolute; pointer-events: none;" aria-label="Vegan Diet">
+                                    <div class="diet-icon" aria-hidden="true">🥗🍎</div>
                                     <div class="diet-label">Vegan</div>
                                     <div class="diet-desc">Entirely plant-based</div>
                                 </label>
@@ -229,7 +230,7 @@
                             <h4 class="section-title">🗑️ Waste Production (weekly)</h4>
                             <div class="form-group">
                                 <div class="slider-header">
-                                    <label>Landfill Trash</label>
+                                    <label for="slider-landfill">Landfill Trash</label>
                                     <span class="slider-value" id="val-landfill">0 kg</span>
                                 </div>
                                 <input type="range" class="slider" id="slider-landfill" min="0" max="50" value="0">
@@ -237,7 +238,7 @@
                             
                             <div class="form-group">
                                 <div class="slider-header">
-                                    <label>Recycled & Composted Waste</label>
+                                    <label for="slider-recycled">Recycled & Composted Waste</label>
                                     <span class="slider-value" id="val-recycled">0 kg</span>
                                 </div>
                                 <input type="range" class="slider" id="slider-recycled" min="0" max="50" value="0">
@@ -278,7 +279,7 @@
             <section id="tab-coach" class="tab-panel">
                 <div class="coach-container glass">
                     <div class="coach-header">
-                        <div class="coach-avatar">🤖</div>
+                        <div class="coach-avatar" aria-hidden="true">🤖</div>
                         <div>
                             <h3>CarbonCoach AI</h3>
                             <span class="coach-status">Active & Ready to Advise</span>
@@ -301,7 +302,7 @@
                     </div>
                     
                     <div class="coach-input-area">
-                        <input type="text" id="chat-input" placeholder="Type your sustainability questions..." autocomplete="off">
+                        <input type="text" id="chat-input" placeholder="Type your sustainability questions..." aria-label="Type your sustainability questions" autocomplete="off">
                         <button class="btn btn-primary" id="btn-send-chat">Send</button>
                     </div>
                 </div>

@@ -1,37 +1,16 @@
 """Main module for the Carbon API and web server."""
 
 import os
-# pyrefly: ignore [missing-import]
 import logging
-
-# pyrefly: ignore [missing-import]
 from contextlib import asynccontextmanager
-
-# pyrefly: ignore [missing-import]
 from fastapi import FastAPI, HTTPException, Body
-
-# pyrefly: ignore [missing-import]
 from fastapi.staticfiles import StaticFiles
-
-# pyrefly: ignore [missing-import]
 from fastapi.responses import FileResponse
-
-# pyrefly: ignore [missing-import]
 from pydantic import BaseModel, Field
-
-# pyrefly: ignore [missing-import]
 from typing import Literal, Optional
-
-# pyrefly: ignore [missing-import]
 import config
-
-# pyrefly: ignore [missing-import]
 from carbon_utils import calculate_footprint, app_carbon_tracker
-
-# pyrefly: ignore [missing-import]
 import firebase_service
-
-# pyrefly: ignore [missing-import]
 import ai_service
 
 # Setup logging
@@ -137,7 +116,7 @@ class CoachRequest(BaseModel):
 
 
 # API Routes
-@app.post("/api/calculate")
+@app.post("/api/calculate", response_model=dict)
 async def api_calculate(request: CalculationRequest):
     """Calculate the user's carbon footprint and save it."""
     try:
@@ -153,7 +132,7 @@ async def api_calculate(request: CalculationRequest):
         ) from e
 
 
-@app.get("/api/history")
+@app.get("/api/history", response_model=list[dict])
 async def api_get_history():
     """Get the user's carbon footprint calculation history."""
     try:
@@ -167,7 +146,7 @@ async def api_get_history():
         ) from e
 
 
-@app.get("/api/goals")
+@app.get("/api/goals", response_model=list[dict])
 async def api_get_goals():
     """Get the user's active goals."""
     try:
@@ -181,7 +160,7 @@ async def api_get_goals():
         ) from e
 
 
-@app.post("/api/goals/{goal_id}/toggle")
+@app.post("/api/goals/{goal_id}/toggle", response_model=list[dict])
 async def api_toggle_goal(goal_id: str, completed: bool = Body(..., embed=True)):
     """Toggle a goal's completion status."""
     try:
@@ -195,7 +174,7 @@ async def api_toggle_goal(goal_id: str, completed: bool = Body(..., embed=True))
         ) from e
 
 
-@app.get("/api/badges")
+@app.get("/api/badges", response_model=list[dict])
 async def api_get_badges():
     """Get the user's earned badges."""
     try:
@@ -209,7 +188,7 @@ async def api_get_badges():
         ) from e
 
 
-@app.post("/api/coach")
+@app.post("/api/coach", response_model=dict)
 async def api_coach(request: CoachRequest):
     """Interact with the AI Coach."""
     try:
@@ -226,7 +205,7 @@ async def api_coach(request: CoachRequest):
         ) from e
 
 
-@app.get("/api/metrics")
+@app.get("/api/metrics", response_model=dict)
 async def api_get_metrics():
     """Get server carbon emission metrics."""
     try:
@@ -262,7 +241,6 @@ async def root():
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 if __name__ == "__main__":
-    # pyrefly: ignore [missing-import]
     import uvicorn
 
     # Check environment configuration and start uvicorn

@@ -301,7 +301,7 @@ function renderGoals() {
         const item = document.createElement('div');
         item.className = `goal-item ${goal.completed ? 'completed' : ''}`;
         item.innerHTML = `
-            <div class="goal-checkbox" onclick="toggleGoal('${goal.id}', ${!goal.completed})"></div>
+            <div id="goal-checkbox-${goal.id}" class="goal-checkbox" onclick="toggleGoal('${goal.id}', ${!goal.completed})"></div>
             <div class="goal-text">${goal.title}</div>
             <span class="goal-tag">${goal.category}</span>
         `;

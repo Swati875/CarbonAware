@@ -4,7 +4,7 @@
 import asyncio
 import logging
 import random
-from config import IS_GEMINI_ENABLED
+from config import IS_GEMINI_ENABLED, GEMINI_API_KEY
 
 logger = logging.getLogger("ai_service")
 
@@ -15,7 +15,7 @@ if IS_GEMINI_ENABLED:
         # pyrefly: ignore [missing-import]
         import google.generativeai as genai
 
-        genai.configure(api_key="AQ.Ab8RN6IHVjm_8Avp_scPfbnWishnvv03m4PG6bxJr36k6ZE_9g")
+        genai.configure(api_key=GEMINI_API_KEY)
         # Using gemini-3.5-flash as the standard efficient model
         model = genai.GenerativeModel("gemini-3.5-flash")
         logger.info("Google Gemini AI client successfully initialized.")

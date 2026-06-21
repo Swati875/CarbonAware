@@ -22,7 +22,7 @@ class CarbonAppTestCase(unittest.TestCase):
                 os.remove(firebase_service.LOCAL_DB_FILE)
             except Exception:
                 pass
-        firebase_service._local_db_cache = None
+        firebase_service._LOCAL_DB_CACHE = None
 
     def tearDown(self):
         # Clean local db after each test
@@ -31,7 +31,7 @@ class CarbonAppTestCase(unittest.TestCase):
                 os.remove(firebase_service.LOCAL_DB_FILE)
             except Exception:
                 pass
-        firebase_service._local_db_cache = None
+        firebase_service._LOCAL_DB_CACHE = None
 
     def test_calculate_footprint_math(self):
         data = {
